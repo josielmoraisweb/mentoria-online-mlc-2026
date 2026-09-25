@@ -23,6 +23,7 @@ export default function ModuleCarousel({continuous = false}) {
   const [step, setStep] = useState(335);
   const viewportRef = React.useRef(null);
   const trackRef = React.useRef(null);
+  const pointerStart = React.useRef(null);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -53,10 +54,10 @@ export default function ModuleCarousel({continuous = false}) {
   }, []);
 
   useEffect(() => {
-    if (!inView || paused || reducedMotion) return;
+    if (continuous || !inView || paused || reducedMotion) return;
     const timer = window.setInterval(() => {setAnimated(true); setIndex(current => current + 1)}, 2800);
     return () => window.clearInterval(timer);
-  }, [inView, paused, reducedMotion]);
+  }, [continuous, inView, paused, reducedMotion]);
 
   const move = direction => {
     setAnimated(true);
@@ -73,14 +74,25 @@ export default function ModuleCarousel({continuous = false}) {
     }
   };
 
+  const moveContinuous = distance => {
+    const animation = trackRef.current?.getAnimations().find(item => item.animationName === 'm-module-continuous');
+    if (animation && typeof animation.currentTime === 'number') {
+      animation.currentTime = (animation.currentTime + distance / (modules.length * step) * 55000 + 55000) % 55000;
+    } else {
+      viewportRef.current?.scrollBy({left: distance, behavior: 'smooth'});
+    }
+  };
+
   if (continuous) return <div className="modules-carousel modules-carousel-continuous" style={{'--module-loop-distance': `${modules.length * step}px`}} aria-label="Módulos do Método Lash Campeã">
-    <div className="modules-carousel-viewport">
+    <div className="modules-carousel-viewport" ref={viewportRef} onPointerDown={event => {pointerStart.current = event.clientX;event.currentTarget.setPointerCapture(event.pointerId)}} onPointerUp={event => {if (pointerStart.current !== null) {const delta = pointerStart.current - event.clientX;if (Math.abs(delta) > 25) moveContinuous(delta);pointerStart.current = null}}} onPointerCancel={() => {pointerStart.current = null}}>
       <div className="modules-carousel-track continuous" ref={trackRef}>
         {[0, 1].flatMap(copy => modules.map(([src, label], item) => <div className="modules-carousel-card" key={`${copy}-${item}`} aria-hidden={copy === 1}>
           <img src={src} alt={copy === 0 ? label : ''} loading="lazy" draggable="false"/>
         </div>))}
       </div>
     </div>
+    <button className="modules-carousel-arrow previous" type="button" aria-label="Módulo anterior" onClick={() => moveContinuous(-step)}><img src="/figma/19-679-66054.svg" alt=""/></button>
+    <button className="modules-carousel-arrow next" type="button" aria-label="Próximo módulo" onClick={() => moveContinuous(step)}><img src="/figma/19-679-a3959.svg" alt=""/></button>
   </div>;
 
   return <div className="modules-carousel" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocus={() => setPaused(true)} onBlur={event => {if (!event.currentTarget.contains(event.relatedTarget)) setPaused(false)}}>

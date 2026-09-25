@@ -127,9 +127,7 @@ export default function MobilePage({faq}){
  },[]);
  return <main className="mobile-page">
   <section className="m-hero">
-   <div className="m-hero-collage" aria-hidden="true">{[1,2,3,4].map(i=><img src={`/figma/mobile-hero-collage-${i}.webp`} alt="" key={i}/>)}</div>
-   <img className="m-hero-photo" src="/figma/mobile-hero.webp" alt="Maria Lisboa com troféus" fetchPriority="high"/>
-   <div className="m-hero-shade"/>
+   <img className="m-hero-frame" src="/figma/mobile-hero-frame.webp" alt="Maria Lisboa com troféus e conquistas" fetchPriority="high"/>
    <div className="m-hero-content">
     <img className="m-logo" src="/figma/mobile-hero-logo.svg" alt="Método Lash Campeã"/>
     <h1>PARE DE SONHAR COM O PÓDIO. PREPARE-SE PARA ELE.</h1>
