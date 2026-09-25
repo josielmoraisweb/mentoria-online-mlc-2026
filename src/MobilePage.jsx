@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react';
+import ModuleCarousel from './ModuleCarousel.jsx';
 
 const checkout = 'https://pay.kiwify.com.br/NdyupEi';
 const gold = (text) => <span className="m-gold">{text}</span>;
@@ -46,10 +47,6 @@ const benefits = [
   ['Evitar erros críticos','Conheça os detalhes que podem custar pontos ou a vaga e saiba como evitá-los com antecedência.']
 ];
 const benefitIcons = ['eb4ef','bb7d9','2ab1b','884c1','fcfc1','dd798'].map(id=>`/figma/19-606-${id}.svg`);
-const modules = [
-  '/figma/19-679-4f318.webp','/figma/19-679-74acf.webp','/figma/19-679-f987d.webp',
-  '/figma/19-679-871fd.webp','/figma/19-679-49f44.webp'
-];
 const onlineBenefits = [
   'Acesse pelo celular ou computador de onde estiver, quando quiser',
   'Aulas organizadas em uma área de membros em jornada lógica e estruturada',
@@ -71,8 +68,8 @@ const results = [
   '/figma/19-831-efff3.webp','/figma/19-831-97825.webp','/figma/19-831-45e37.webp'
 ];
 const testimonials = [
-  '/figma/19-865-5d92d.webp','/figma/19-865-82b88.webp','/figma/19-865-a16c4.webp',
-  '/figma/19-865-8dd32.webp','/figma/19-865-40c83.webp','/figma/19-865-aba6b.webp',
+  '/figma/19-865-5d92d-atualizado.webp','/figma/19-865-82b88.webp','/figma/19-865-a16c4.webp',
+  '/figma/19-865-8dd32.webp','/figma/19-865-40c83-atualizado.webp','/figma/19-865-aba6b.webp',
   '/figma/19-865-f03eb.webp','/figma/19-865-743e7.webp','/figma/19-865-8600f.webp'
 ];
 const included = [
@@ -164,7 +161,7 @@ export default function MobilePage({faq}){
   <Section className="m-modules">
    <Heading>Tudo o que você precisa dominar antes de entrar em uma {gold('competição.')}</Heading>
    <p>Conheça os módulos que fazem parte do Método Lash Campeã e acompanhe uma jornada criada para preparar você para o universo dos campeonatos.</p>
-   <div className="m-module-strip">{modules.map((src,i)=><img src={src} alt={`Módulo ${i+1} do Método Lash Campeã`} loading="lazy" key={src}/>)}</div>
+   <ModuleCarousel/>
   </Section>
   <Section className="m-online">
    <div><Heading>Uma metodologia construída nos campeonatos, {gold('agora disponível onde você estiver.')}</Heading><ul>{onlineBenefits.map(x=><li key={x}>{x}</li>)}</ul></div>

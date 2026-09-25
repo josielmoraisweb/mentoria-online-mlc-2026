@@ -13,7 +13,7 @@ import Champion from './figma/19-479.jsx';
 import MechanismSection from './figma/19-488.jsx';
 import AudienceSection from './figma/19-542.jsx';
 import BenefitsSection from './figma/19-606.jsx';
-import ModulesSection from './figma/19-679.jsx';
+import ModulesSection from './ModulesSection.jsx';
 import OnlineSection from './figma/19-724.jsx';
 import AwardsSection from './figma/19-772.jsx';
 import ResultsSection from './figma/19-831.jsx';
