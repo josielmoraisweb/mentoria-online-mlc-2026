@@ -7,6 +7,12 @@ button,a{-webkit-tap-highlight-color:transparent}
 .ty-hero{position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:center;min-height:min(1122px,58.4375vw);padding:min(120px,6.25vw) 24px min(46px,2.4vw);text-align:center;background:radial-gradient(ellipse at 70% 40%,rgba(50,29,21,.4),transparent 65%),#1b100c}
 .ty-hero::before{content:"";position:absolute;z-index:-1;inset:0;background:url('/figma/thank-you-background.webp') center top/cover no-repeat;opacity:.5;pointer-events:none}
 .ty-hero h1,.ty-next h2,.ty-closing h2{margin:0;font-family:Adogare,serif;font-weight:400;background:linear-gradient(177deg,#b9933f 0%,#e0bf68 50%,#c8a24d 100%);background-clip:text;-webkit-background-clip:text;color:transparent}
+.ty-word{display:inline-block;white-space:nowrap}
+.ty-accented-letter{position:relative;display:inline-block}
+.ty-accented-letter::after{position:absolute;z-index:1;left:50%;color:#d4ae59;pointer-events:none;-webkit-text-fill-color:#d4ae59}
+.ty-accent-acute::after{content:'´';top:-.2em;font:400 .4em/1 Georgia,serif;transform:translateX(-25%)}
+.ty-accent-tilde::after{content:'~';top:-.19em;font:400 .36em/1 Georgia,serif;transform:translateX(-50%)}
+.ty-accent-cedilla::after{content:'¸';top:.68em;font:400 .4em/1 Georgia,serif;transform:translateX(-50%)}
 .ty-hero h1{max-width:1720px;font-size:min(104px,5.417vw);line-height:.9}
 .ty-subtitle{margin:min(26px,1.354vw) 0 min(64px,3.333vw);color:#f5edd8;font-size:min(31px,1.615vw);font-weight:300;line-height:1.38}
 .ty-video{position:relative;width:min(1280px,66.667vw);aspect-ratio:16/9;flex:none;overflow:hidden;border:2px solid #997d38;border-radius:min(26px,1.354vw);background:radial-gradient(ellipse at 50% 45%,#472018 0%,#2a0f0d 52%,#0d0605 100%)}
@@ -69,7 +75,7 @@ button,a{-webkit-tap-highlight-color:transparent}
  .ty-ticker{height:40px;font-size:14px}
  .ty-next{padding:74px 20px 76px}
  .ty-eyebrow{margin-bottom:22px;font-size:14px;letter-spacing:1.9px}
- .ty-next h2{font-size:clamp(42px,10vw,54px)}
+ .ty-next h2{font-size:clamp(36px,9.2vw,54px)}
  .ty-next-copy{margin:25px 0 24px;font-size:16px;line-height:1.55}
  .ty-whatsapp{width:100%;max-width:400px;min-height:64px;gap:12px;padding:12px 16px;border-radius:12px;font-size:18px}
  .ty-whatsapp img{width:28px;height:auto}
