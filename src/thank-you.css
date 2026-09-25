@@ -11,13 +11,14 @@ button,a{-webkit-tap-highlight-color:transparent}
 .ty-subtitle{margin:min(26px,1.354vw) 0 min(64px,3.333vw);color:#f5edd8;font-size:min(31px,1.615vw);font-weight:300;line-height:1.38}
 .ty-video{position:relative;width:min(1280px,66.667vw);aspect-ratio:16/9;flex:none;overflow:hidden;border:2px solid #997d38;border-radius:min(26px,1.354vw);background:radial-gradient(ellipse at 50% 45%,#472018 0%,#2a0f0d 52%,#0d0605 100%)}
 .ty-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-.ty-video-cover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:min(67px,3.49vw);width:100%;height:100%;border:0;background:transparent;color:rgba(199,184,168,.75);font:400 min(16px,.833vw) Poppins,sans-serif;cursor:pointer}
-.ty-video-cover:focus-visible,.ty-whatsapp:focus-visible{outline:3px solid #f5edd8;outline-offset:4px}
-.ty-video-cover:disabled{cursor:wait}
-.ty-play-art{position:relative;display:block;width:min(112px,5.833vw);height:min(112px,5.833vw);transition:transform .25s}
-.ty-video-cover:not(:disabled):hover .ty-play-art{transform:scale(1.08)}
-.ty-play-art img:first-child{position:absolute;inset:0;width:100%;height:100%}
-.ty-play-art img:last-child{position:absolute;left:38.4%;top:32.1%;width:30.4%;height:34.8%}
+.ty-video-poster{position:absolute;z-index:1;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.ty-sound-button{position:absolute;z-index:2;top:50%;left:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:170px;padding:15px 23px;border:1px solid #d4b46a;border-radius:12px;background:rgba(67,36,25,.92);box-shadow:0 8px 30px rgba(0,0,0,.3);color:#f5edd8;font:600 15px/1.2 Poppins,sans-serif;cursor:pointer;transform:translate(-50%,-50%);transition:background .2s,transform .2s}
+.ty-sound-button:hover{background:rgba(91,53,34,.96);transform:translate(-50%,-50%) scale(1.04)}
+.ty-sound-button:focus-visible,.ty-whatsapp:focus-visible{outline:3px solid #f5edd8;outline-offset:4px}
+.ty-sound-button svg{width:36px;height:36px}
+.ty-sound-button.is-on{top:auto;left:auto;right:14px;bottom:14px;min-width:0;padding:8px 11px;gap:2px;transform:none;font-size:11px}
+.ty-sound-button.is-on:hover{transform:scale(1.04)}
+.ty-sound-button.is-on svg{width:23px;height:23px}
 .ty-ticker{height:min(46px,2.396vw);overflow:hidden;background:linear-gradient(90deg,#987c37 0%,#c7a75d 34%,#eed989 64%,#c2a358 100%);color:#1e1108;display:flex;align-items:center;font:500 italic min(18px,.938vw)/1 Poppins,sans-serif;letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
 .ty-ticker-track{display:flex;width:max-content;animation:ty-ticker 32s linear infinite}
 .ty-ticker-track span{padding-right:10px}
@@ -45,9 +46,8 @@ button,a{-webkit-tap-highlight-color:transparent}
  .ty-hero h1{font-size:clamp(52px,8vw,76px)}
  .ty-subtitle{margin:22px 0 45px;font-size:clamp(18px,2.8vw,26px)}
  .ty-video{width:min(720px,100%);border-radius:19px}
- .ty-video-cover{gap:25px;font-size:12px}
- .ty-play-art,.ty-play-art img:first-child{width:76px;height:76px}
- .ty-play-art img:last-child{left:29px;top:24px;width:23px;height:27px}
+ .ty-sound-button{min-width:145px;padding:12px 17px;font-size:12px}
+ .ty-sound-button svg{width:30px;height:30px}
  .ty-next{min-height:0;padding:82px 24px 78px}
  .ty-eyebrow{font-size:18px;letter-spacing:2.5px}
  .ty-next h2{font-size:clamp(49px,7vw,70px)}
@@ -64,9 +64,8 @@ button,a{-webkit-tap-highlight-color:transparent}
  .ty-subtitle{margin:25px 0 38px;font-size:17px;line-height:1.5}
  .ty-desktop-break{display:none}
  .ty-video{border-radius:16px}
- .ty-video-cover{gap:8px;font-size:11px}
- .ty-play-art,.ty-play-art img:first-child{width:58px;height:58px}
- .ty-play-art img:last-child{left:22px;top:18px;width:18px;height:21px}
+ .ty-sound-button{min-width:118px;padding:8px 11px;font-size:11px}
+ .ty-sound-button svg{width:25px;height:25px}
  .ty-ticker{height:40px;font-size:14px}
  .ty-next{padding:74px 20px 76px}
  .ty-eyebrow{margin-bottom:22px;font-size:14px;letter-spacing:1.9px}
@@ -81,4 +80,4 @@ button,a{-webkit-tap-highlight-color:transparent}
  .ty-footer p{font-size:12px;line-height:1.6}
  .ty-footer p+p{font-size:11px}
 }
-@media(prefers-reduced-motion:reduce){.ty-ticker-track{animation:none}.ty-whatsapp,.ty-play-art{transition:none}}
+@media(prefers-reduced-motion:reduce){.ty-ticker-track{animation:none}.ty-whatsapp,.ty-sound-button{transition:none}}
