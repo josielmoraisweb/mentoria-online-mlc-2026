@@ -131,7 +131,7 @@ export default function MobilePage({faq}){
  return <main className="mobile-page">
   <section className="m-hero">
    <img className="m-hero-ellipse" src="/figma/mobile-hero-v2-ellipse.svg" alt=""/>
-   <img className="m-hero-frame" src="/figma/mobile-hero-v2-frame.webp" alt="Maria Lisboa com troféus e conquistas" fetchPriority="high"/>
+   <img className="m-hero-frame" src="/figma/mobile-hero-v2-frame.webp?v=162882c" alt="Maria Lisboa com troféus e conquistas" fetchPriority="high"/>
    <div className="m-hero-content">
     <img className="m-logo" src="/figma/mobile-hero-v2-logo.svg" alt="Método Lash Campeã"/>
     <h1>PARE DE SONHAR COM O PÓDIO. PREPARE-SE PARA ELE.</h1>
