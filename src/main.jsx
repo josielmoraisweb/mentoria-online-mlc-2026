@@ -1,7 +1,8 @@
-import React, {useEffect,useState} from 'react';
+import React, {useEffect} from 'react';
 import {createRoot} from 'react-dom/client';
 import './figma-generated.css';
 import './responsive.css';
+import MobilePage from './MobilePage.jsx';
 import Hero from './figma/heroContext.jsx';
 import VideoSection from './figma/19-212.jsx';
 import IdentificationSection from './figma/19-223.jsx';
@@ -37,41 +38,6 @@ const sections=[
 ];
 function Ticker(){return <div className="ticker-custom" aria-label="Método Lash Campeã"><div className="ticker-track">{Array.from({length:20},(_,i)=><span className={i%2?'ticker-light':'ticker-medium'} key={i}>Método Lash Campeã • </span>)}</div></div>}
 function Faq(){return <section className="faq-custom reveal-section" id="faq"><div><h2>Perguntas <span>frequentes.</span></h2>{faq.map(([q,a])=><details key={q}><summary>{q}<span aria-hidden="true">+</span></summary><p className="faq-answer">{a}</p></details>)}</div></section>}
-function MobilePage(){
- const [data,setData]=useState([]);
- useEffect(()=>{
-  const imageSections=new Set(['hero','champion','modules','online','awards','results','testimonials','maria','closing']);
-  setData(sections.map(([key])=>{
-   const root=document.querySelector(`.figma-section[data-section="${key}"]`);
-   const heading=[...root.querySelectorAll('[data-name="Heading 2"] p, [data-name="Heading 2"] span')].map(x=>x.textContent.trim()).filter(Boolean);
-   const title=heading.length?heading.join(' '):[...root.querySelectorAll('p')].find(x=>getComputedStyle(x).fontFamily.includes('Adogare')&&parseFloat(getComputedStyle(x).fontSize)>=45)?.textContent.trim()||'';
-   const seen=new Set();
-   const copy=[...root.querySelectorAll('p')].map(x=>x.textContent.trim()).filter(x=>{if(!x||x===title||title.includes(x)||seen.has(x)||/^\d{1,2}$/.test(x)||x==='MLC'||/quero garantir minha vaga/i.test(x))return false;seen.add(x);return x.length>=7}).slice(0,40);
-   const images=imageSections.has(key)?[...new Set([...root.querySelectorAll('img')].map(x=>x.getAttribute('src')).filter(x=>x?.endsWith('.webp')&&!x.includes('3ff4e.webp')))]:[];
-   return {key,title,copy,images};
-  }));
- },[]);
- useEffect(()=>{
-  if(!data.length)return;
-  const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}}),{threshold:.06});
-  document.querySelectorAll('.mobile-section').forEach(section=>observer.observe(section));
-  return ()=>observer.disconnect();
- },[data]);
- return <div className="mobile-page">
-  {data.map(({key,title,copy,images})=><React.Fragment key={key}>
-   <section className={`mobile-section mobile-${key}`}>
-    {key==='hero'&&<img className="mobile-logo" src="/figma/heroContext-f8a7e.svg" alt="Método Lash Campeã"/>}
-    {title&&<h2>{title}</h2>}
-    {key==='video'&&<div className="mobile-video"><iframe src="https://www.youtube-nocookie.com/embed/ebj7Ctl7pyo?rel=0" title="Conheça o Método Lash Campeã" loading="lazy" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen/></div>}
-    {images.length>0&&<div className="mobile-images">{images.map(src=><img key={src} src={src} alt="" loading={key==='hero'?'eager':'lazy'}/>)}</div>}
-    <div className="mobile-copy">{copy.map((line,i)=><p key={i}>{line}</p>)}</div>
-    {['hero','video','identification','mechanism','awards','offer'].includes(key)&&<a className="mobile-cta" href={checkout}>Quero garantir minha vaga</a>}
-   </section>
-   {['hero','champion','online'].includes(key)&&<Ticker/>}
-  </React.Fragment>)}
-  <Faq/><footer>© Copyright Maria Lisboa 2026 – Todos os direitos reservados.<br/>Desenvolvido por: @josielmorais_</footer>
- </div>;
-}
 function App(){
  useEffect(()=>{
   const resize=()=>document.documentElement.style.setProperty('--site-scale',Math.min(1,innerWidth/1920));resize();addEventListener('resize',resize);
@@ -80,6 +46,6 @@ function App(){
   const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}}),{threshold:.08});document.querySelectorAll('.reveal-section').forEach(x=>observer.observe(x));
   return ()=>{removeEventListener('resize',resize);observer.disconnect()};
  },[]);
- return <><main id="figma-page">{sections.map(([key,Component,height],i)=><React.Fragment key={key}><section className={`figma-section ${i?'reveal-section':'visible'}`} data-section={key} style={{height}}><Component/></section>{['hero','champion','online'].includes(key)&&<Ticker/>}</React.Fragment>)}<Faq/><section className="figma-section" data-section="footer" style={{height:148}}><Footer/></section></main><MobilePage/></>;
+ return <><main id="figma-page">{sections.map(([key,Component,height],i)=><React.Fragment key={key}><section className={`figma-section ${i?'reveal-section':'visible'}`} data-section={key} style={{height}}><Component/></section>{['hero','champion','online'].includes(key)&&<Ticker/>}</React.Fragment>)}<Faq/><section className="figma-section" data-section="footer" style={{height:148}}><Footer/></section></main><MobilePage faq={faq}/></>;
 }
 createRoot(document.getElementById('app')).render(<App/>);
