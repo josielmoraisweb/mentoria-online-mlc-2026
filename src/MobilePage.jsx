@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import ModuleCarousel from './ModuleCarousel.jsx';
+import {setupBoxReveal} from './boxReveal.js';
 
 const checkout = 'https://pay.kiwify.com.br/NdyupEi';
 const gold = (text) => <span className="m-gold">{text}</span>;
@@ -125,9 +126,7 @@ function FeedbackGallery(){return <div className="m-feedback-grid" aria-label="F
 
 export default function MobilePage({faq}){
  useEffect(()=>{
-  const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}}),{threshold:.06});
-  document.querySelectorAll('.m-reveal').forEach(section=>observer.observe(section));
-  return ()=>observer.disconnect();
+  return setupBoxReveal(document.querySelector('.mobile-page'),'mobile');
  },[]);
  return <main className="mobile-page">
   <section className="m-hero">

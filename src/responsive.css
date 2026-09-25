@@ -11,6 +11,11 @@
 .figma-section[data-section="mechanism"] :is([data-node-id="19:500"],[data-node-id="19:508"],[data-node-id="19:516"],[data-node-id="19:524"],[data-node-id="19:532"]){align-items:center;text-align:center}
 .figma-section[data-section="mechanism"] :is([data-node-id="19:500"],[data-node-id="19:508"],[data-node-id="19:516"],[data-node-id="19:524"],[data-node-id="19:532"]) > div{width:100%;align-items:center}
 .figma-section[data-section="mechanism"] :is([data-node-id="19:500"],[data-node-id="19:508"],[data-node-id="19:516"],[data-node-id="19:524"],[data-node-id="19:532"]) p{width:100%;text-align:center;white-space:normal}
+.figma-section[data-section="identification"] [data-node-id="19:228"]{align-items:center}
+.figma-section.reveal-section,.m-section.m-reveal,.faq-custom.reveal-section{opacity:1;transform:none;transition:none}
+.box-reveal{opacity:0;translate:0 20px;transition:opacity .62s ease var(--box-delay,0ms),translate .62s cubic-bezier(.2,.65,.3,1) var(--box-delay,0ms)}
+.box-reveal.box-visible{opacity:1;translate:0 0}
+@media(min-width:901px){.optimized-scroll #figma-page .figma-section:not([data-section="hero"]){content-visibility:auto;contain-intrinsic-size:auto 1100px}}
 .mobile-page{display:none}
 
 @media(max-width:900px){
@@ -130,5 +135,5 @@
 .m-lightbox-close{position:absolute;right:20px;top:16px;width:42px;height:42px;font:30px/1 Poppins,sans-serif}
 .m-lightbox-controls{position:absolute;bottom:22px;display:flex;align-items:center;gap:16px;color:#f5edd8;font:14px Poppins,sans-serif}
 .m-lightbox-controls button{width:40px;height:40px;font:26px/1 Poppins,sans-serif}
-@media(prefers-reduced-motion:reduce){.reveal-section,.m-reveal{opacity:1;transform:none;transition:none}.ticker-track,.m-ticker>div,.m-cta,.figma-section [data-name="CTAButton"]{animation:none}.modules-carousel-track{transition:none}html{scroll-behavior:auto}}
+@media(prefers-reduced-motion:reduce){.reveal-section,.m-reveal,.box-reveal{opacity:1;transform:none;translate:none;transition:none}.ticker-track,.m-ticker>div,.m-cta,.figma-section [data-name="CTAButton"]{animation:none}.modules-carousel-track{transition:none}html{scroll-behavior:auto}}
 @media(prefers-reduced-motion:reduce){.modules-carousel-continuous .modules-carousel-track,.m-hero .m-cta{animation:none}}

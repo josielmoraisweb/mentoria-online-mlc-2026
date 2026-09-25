@@ -3,6 +3,7 @@ import {createRoot} from 'react-dom/client';
 import './figma-generated.css';
 import './responsive.css';
 import MobilePage from './MobilePage.jsx';
+import {setupBoxReveal} from './boxReveal.js';
 import Hero from './figma/heroContext.jsx';
 import VideoSection from './figma/19-212.jsx';
 import IdentificationSection from './figma/19-223.jsx';
@@ -40,7 +41,18 @@ function Ticker(){return <div className="ticker-custom" aria-label="Método Lash
 function Faq(){return <section className="faq-custom reveal-section" id="faq"><div><h2>Perguntas <span>frequentes.</span></h2>{faq.map(([q,a])=><details key={q}><summary>{q}<span aria-hidden="true">+</span></summary><p className="faq-answer">{a}</p></details>)}</div></section>}
 function App(){
  useEffect(()=>{
-  const resize=()=>document.documentElement.style.setProperty('--site-scale',Math.min(1,innerWidth/1920));resize();addEventListener('resize',resize);
+  let disconnectBoxes=()=>{};
+  let desktopBoxesReady=false;
+  const resize=()=>{
+   document.documentElement.style.setProperty('--site-scale',Math.min(1,innerWidth/1920));
+   if(innerWidth>900&&!desktopBoxesReady){
+    disconnectBoxes=setupBoxReveal(document.getElementById('figma-page'),'desktop');
+    desktopBoxesReady=true;
+    document.documentElement.classList.add('optimized-scroll');
+   }
+  };
+  resize();addEventListener('resize',resize);
+  document.querySelectorAll('#figma-page .figma-section:not([data-section="hero"]) img').forEach(img=>{img.decoding='async'});
   const video=document.querySelector('[data-node-id="19:214"]');if(video)video.innerHTML='<iframe class="site-video" src="https://www.youtube-nocookie.com/embed/ebj7Ctl7pyo?rel=0" title="Conheça o Método Lash Campeã" loading="lazy" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
   document.querySelectorAll('[data-name="CTAButton"]').forEach(button=>{
    const isCheckout=Boolean(button.closest('[data-section="offer"]'));
@@ -50,8 +62,7 @@ function App(){
    button.addEventListener('click',activate);
    button.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();activate()}});
   });
-  const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}}),{threshold:.08});document.querySelectorAll('.reveal-section').forEach(x=>observer.observe(x));
-  return ()=>{removeEventListener('resize',resize);observer.disconnect()};
+  return ()=>{removeEventListener('resize',resize);disconnectBoxes()};
  },[]);
  return <><main id="figma-page">{sections.map(([key,Component,height],i)=><React.Fragment key={key}><section id={key==='offer'?'investimento-desktop':undefined} className={`figma-section ${i?'reveal-section':'visible'}`} data-section={key} style={{height}}><Component/></section>{['hero','champion','online'].includes(key)&&<Ticker/>}</React.Fragment>)}<Faq/><section className="figma-section" data-section="footer" style={{height:148}}><Footer/></section></main><MobilePage faq={faq}/></>;
 }
