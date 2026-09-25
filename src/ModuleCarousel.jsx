@@ -79,12 +79,35 @@ export default function ModuleCarousel({continuous = false}) {
     if (animation && typeof animation.currentTime === 'number') {
       animation.currentTime = (animation.currentTime + distance / (modules.length * step) * 55000 + 55000) % 55000;
     } else {
-      viewportRef.current?.scrollBy({left: distance, behavior: 'smooth'});
+      viewportRef.current?.scrollBy({left: distance, behavior: 'auto'});
     }
   };
 
+  const startContinuousDrag = event => {
+    if (!event.isPrimary || (event.pointerType === 'mouse' && event.button !== 0)) return;
+    const animation = trackRef.current?.getAnimations().find(item => item.animationName === 'm-module-continuous');
+    animation?.pause();
+    pointerStart.current = {id: event.pointerId, x: event.clientX, animation};
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const dragContinuous = event => {
+    const drag = pointerStart.current;
+    if (!drag || drag.id !== event.pointerId) return;
+    const distance = drag.x - event.clientX;
+    drag.x = event.clientX;
+    if (distance) moveContinuous(distance);
+  };
+
+  const stopContinuousDrag = event => {
+    const drag = pointerStart.current;
+    if (!drag || drag.id !== event.pointerId) return;
+    drag.animation?.play();
+    pointerStart.current = null;
+  };
+
   if (continuous) return <div className="modules-carousel modules-carousel-continuous" style={{'--module-loop-distance': `${modules.length * step}px`}} aria-label="Módulos do Método Lash Campeã">
-    <div className="modules-carousel-viewport" ref={viewportRef} onPointerDown={event => {pointerStart.current = event.clientX;event.currentTarget.setPointerCapture(event.pointerId)}} onPointerUp={event => {if (pointerStart.current !== null) {const delta = pointerStart.current - event.clientX;if (Math.abs(delta) > 25) moveContinuous(delta);pointerStart.current = null}}} onPointerCancel={() => {pointerStart.current = null}}>
+    <div className="modules-carousel-viewport" ref={viewportRef} onPointerDown={startContinuousDrag} onPointerMove={dragContinuous} onPointerUp={stopContinuousDrag} onPointerCancel={stopContinuousDrag}>
       <div className="modules-carousel-track continuous" ref={trackRef}>
         {[0, 1].flatMap(copy => modules.map(([src, label], item) => <div className="modules-carousel-card" key={`${copy}-${item}`} aria-hidden={copy === 1}>
           <img src={src} alt={copy === 0 ? label : ''} loading="lazy" draggable="false"/>
