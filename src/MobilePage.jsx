@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import ModuleCarousel from './ModuleCarousel.jsx';
+import YouTubeVideo from './YouTubeVideo.jsx';
 import {setupBoxReveal} from './boxReveal.js';
 
 const checkout = 'https://pay.kiwify.com.br/NdyupEi';
@@ -153,7 +154,7 @@ export default function MobilePage({faq}){
   <Ticker/>
   <Section className="m-video-section">
    <Heading>Conheça o Método Lash Campeã</Heading>
-   <div className="m-video"><iframe src="https://www.youtube-nocookie.com/embed/ebj7Ctl7pyo?rel=0" title="Conheça o Método Lash Campeã" loading="lazy" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen/></div>
+   <div className="m-video"><YouTubeVideo/></div>
    <CTA/>
   </Section>
   <Section className="m-identification">

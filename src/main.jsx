@@ -53,7 +53,6 @@ function App(){
   };
   resize();addEventListener('resize',resize);
   document.querySelectorAll('#figma-page .figma-section:not([data-section="hero"]) img').forEach(img=>{img.decoding='async'});
-  const video=document.querySelector('[data-node-id="19:214"]');if(video)video.innerHTML='<iframe class="site-video" src="https://www.youtube-nocookie.com/embed/ebj7Ctl7pyo?rel=0" title="Conheça o Método Lash Campeã" loading="lazy" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
   document.querySelectorAll('[data-name="CTAButton"]').forEach(button=>{
    const isCheckout=Boolean(button.closest('[data-section="offer"]'));
    const activate=()=>isCheckout?(window.top || window).location.assign(checkout):document.getElementById('investimento-desktop')?.scrollIntoView({behavior:'smooth',block:'start'});
