@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import ModuleCarousel from './ModuleCarousel.jsx';
 
 const checkout = 'https://pay.kiwify.com.br/NdyupEi';
@@ -68,16 +68,16 @@ const results = [
   '/figma/19-831-efff3.webp','/figma/19-831-97825.webp','/figma/19-831-45e37.webp'
 ];
 const feedbackLeft = [
-  ['/figma/19-865-a16c4.webp', 'lashdayanegomes'],
-  ['/figma/19-865-8dd32.webp', 'Cílios/Cursos'],
-  ['/figma/mlc-testimonial-tais.webp', 'Taís Pletsch'],
+  ['/figma/mobile-feedback-lashdayane.webp', 'lashdayanegomes'],
+  ['/figma/mobile-feedback-cilios.webp', 'Cílios/Cursos'],
+  ['/figma/mobile-feedback-tais.webp', 'Taís Pletsch'],
   ['/figma/19-865-743e7.webp', 'Thayres Maciel'],
-  ['/figma/19-865-aba6b.webp', 'Feedback de aluna'],
-  ['/figma/19-865-8600f.webp', 'Anna Ribeiro']
+  ['/figma/mobile-feedback-aula.webp', 'Feedback de aluna'],
+  ['/figma/mobile-feedback-anna.webp', 'Anna Ribeiro']
 ];
 const feedbackRight = [
-  ['/figma/mlc-testimonial-gabrieli.webp', 'Gabrieli Patias'],
-  ['/figma/mlc-testimonial-ariane.webp', 'Ariane Caldas']
+  ['/figma/mobile-feedback-gabrieli.webp', 'Gabrieli Patias'],
+  ['/figma/mobile-feedback-ariane.webp', 'Ariane Caldas']
 ];
 const included = [
   'Curso Online MLC completo','+ de 15 módulos com +40 aulas gravadas','Material de apoio','Apostila digital',
@@ -96,6 +96,8 @@ function Gallery({photos}){
  const [selected,setSelected]=useState(null);
  const [zoom,setZoom]=useState(1);
  const [touchDistance,setTouchDistance]=useState(null);
+ const [position,setPosition]=useState({x:0,y:0});
+ const drag=useRef(null);
  useEffect(()=>{
   if(selected===null)return;
   const onKey=event=>{if(event.key==='Escape')setSelected(null)};
@@ -104,16 +106,18 @@ function Gallery({photos}){
   document.body.style.overflow='hidden';
   return()=>{document.removeEventListener('keydown',onKey);document.body.style.overflow=oldOverflow};
  },[selected]);
- const open=index=>{setSelected(index);setZoom(1)};
+ const open=index=>{setSelected(index);setZoom(1);setPosition({x:0,y:0})};
  const pinchDistance=event=>Math.hypot(event.touches[0].clientX-event.touches[1].clientX,event.touches[0].clientY-event.touches[1].clientY);
+ const moveImage=(x,y)=>{if(!drag.current||zoom<=1)return;const deltaX=x-drag.current.x;const deltaY=y-drag.current.y;drag.current={x,y};setPosition(previous=>({x:previous.x+deltaX,y:previous.y+deltaY}))};
+ const changeZoom=amount=>{const next=Math.max(1,Math.min(4,zoom+amount));setZoom(next);if(next===1)setPosition({x:0,y:0})};
  return <>
   <div className="m-photo-grid">{photos.map((src,i)=><button type="button" onClick={()=>open(i)} aria-label={`Ampliar resultado ${i+1}`} key={src}><img src={src} alt={`Resultado de aluna ${i+1}`} loading="lazy"/></button>)}</div>
   {selected!==null&&<div className="m-lightbox" role="dialog" aria-modal="true" aria-label={`Resultado de aluna ${selected+1}`} onClick={()=>setSelected(null)}>
    <button className="m-lightbox-close" type="button" onClick={()=>setSelected(null)} aria-label="Fechar imagem">×</button>
-   <div className="m-lightbox-stage" onClick={event=>event.stopPropagation()} onWheel={event=>{event.preventDefault();setZoom(value=>Math.max(1,Math.min(4,value+(event.deltaY<0?.25:-.25))))}} onTouchStart={event=>{if(event.touches.length===2)setTouchDistance(pinchDistance(event))}} onTouchMove={event=>{if(event.touches.length===2&&touchDistance){const next=pinchDistance(event);setZoom(value=>Math.max(1,Math.min(4,value*next/touchDistance)));setTouchDistance(next)}}} onTouchEnd={()=>setTouchDistance(null)}>
-    <img src={photos[selected]} alt={`Resultado de aluna ${selected+1}`} style={{transform:`scale(${zoom})`}}/>
+   <div className="m-lightbox-stage" onClick={event=>event.stopPropagation()} onWheel={event=>{event.preventDefault();changeZoom(event.deltaY<0?.25:-.25)}} onPointerDown={event=>{if(event.pointerType==='mouse'&&zoom>1){drag.current={x:event.clientX,y:event.clientY};event.currentTarget.setPointerCapture(event.pointerId)}}} onPointerMove={event=>{if(event.pointerType==='mouse')moveImage(event.clientX,event.clientY)}} onPointerUp={()=>{drag.current=null}} onTouchStart={event=>{if(event.touches.length===2){drag.current=null;setTouchDistance(pinchDistance(event))}else if(event.touches.length===1){drag.current={x:event.touches[0].clientX,y:event.touches[0].clientY}}}} onTouchMove={event=>{if(event.touches.length===2&&touchDistance){const next=pinchDistance(event);setZoom(value=>Math.max(1,Math.min(4,value*next/touchDistance)));setTouchDistance(next)}else if(event.touches.length===1)moveImage(event.touches[0].clientX,event.touches[0].clientY)}} onTouchEnd={event=>{if(!event.touches.length)drag.current=null;setTouchDistance(null)}}>
+    <img src={photos[selected]} alt={`Resultado de aluna ${selected+1}`} draggable="false" style={{transform:`translate(${position.x}px, ${position.y}px) scale(${zoom})`}}/>
    </div>
-   <div className="m-lightbox-controls" onClick={event=>event.stopPropagation()}><button type="button" onClick={()=>setZoom(value=>Math.max(1,value-.5))} aria-label="Diminuir zoom">−</button><span>{Math.round(zoom*100)}%</span><button type="button" onClick={()=>setZoom(value=>Math.min(4,value+.5))} aria-label="Aumentar zoom">+</button></div>
+   <div className="m-lightbox-controls" onClick={event=>event.stopPropagation()}><button type="button" onClick={()=>changeZoom(-.5)} aria-label="Diminuir zoom">−</button><span>{Math.round(zoom*100)}%</span><button type="button" onClick={()=>changeZoom(.5)} aria-label="Aumentar zoom">+</button></div>
   </div>}
  </>;
 }
@@ -135,7 +139,12 @@ export default function MobilePage({faq}){
     <p className="m-proof">+100 profissionais na metodologia • +40 mentoradas no pódio • 35 pódios em um único campeonato</p>
     <CTA/>
     <div className="m-payment-row" aria-label="Formas de pagamento e compra segura">
-     {['heroContext-00cf8.svg','heroContext-a12be.svg','heroContext-57b3c.svg','heroContext-81ff2.svg','heroContext-8b22c.svg','heroContext-7abb3.svg'].map(name=><img key={name} src={`/figma/${name}`} alt=""/>)}
+     <span className="m-payment-method m-payment-boleto"><img src="/figma/heroContext-00cf8.svg" alt=""/><img src="/figma/heroContext-d2397.svg" alt=""/></span>
+     <span className="m-payment-method"><img src="/figma/heroContext-a12be.svg" alt=""/></span>
+     <span className="m-payment-method m-payment-mastercard"><img src="/figma/heroContext-57b3c.svg" alt=""/></span>
+     <span className="m-payment-method"><img src="/figma/heroContext-81ff2.svg" alt=""/></span>
+     <span className="m-payment-method m-payment-pix"><img src="/figma/heroContext-8b22c.svg" alt=""/></span>
+     <img className="m-payment-trust" src="/figma/heroContext-7abb3.svg" alt=""/>
     </div>
    </div>
   </section>
@@ -158,8 +167,7 @@ export default function MobilePage({faq}){
   <Section className="m-belief">
    <Heading>Trabalho bonito não é o mesmo que {gold('trabalho preparado para competição.')}</Heading>
    <p className="m-kicker">APRENDA A PENSAR COMO UMA JURADA.</p>
-   <div className="m-compare"><article><small>UMA COMPETIDORA</small><h3>Uma competidora olha para o resultado.</h3></article><article><small>UMA MENTORADA PREPARADA</small><h3>Uma Mentorada preparada aprende a observar os critérios que constroem esse resultado.</h3></article></div>
-   <p>Dentro do Método Lash Campeã, você vai desenvolver um olhar mais analítico para compreender regulamentos, interpretar critérios, identificar erros e entender tecnicamente o seu próprio trabalho.</p>
+   <div className="m-compare"><article><small>UMA COMPETIDORA</small><h3>Uma competidora olha para o resultado.</h3></article><article><small>UMA MENTORADA PREPARADA</small><h3>Uma Mentorada preparada aprende a observar os critérios que constroem esse resultado.</h3><p>Dentro do Método Lash Campeã, você vai desenvolver um olhar mais analítico para compreender regulamentos, interpretar critérios, identificar erros e entender tecnicamente o seu próprio trabalho.</p></article></div>
    <blockquote>“Aprenda a enxergar seus trabalhos com os olhos de quem avalia campeonatos”</blockquote>
   </Section>
   <Section className="m-method">
@@ -218,7 +226,7 @@ export default function MobilePage({faq}){
   <Section className="m-offer" id="investimento-mobile">
    <Heading>Agora você pode estudar o Método Lash Campeã de onde estiver.</Heading>
    <p>Pela primeira vez, a metodologia chega em um formato 100% online e gravado.</p>
-   <div className="m-offer-box"><aside><img src="/figma/19-1959-a86e5.svg" alt="Método Lash Campeã"/><p>De: <s>R$697,00</s> por:</p><strong>12x de R$ 51,40</strong><p>ou R$ 497,00 à vista</p><CTA checkoutButton/><p className="m-guarantee">GARANTIA INCONDICIONAL DE 7 DIAS<br/>Não ficou satisfeita? Devolvemos 100% do valor. Sem perguntas.</p></aside><div><p className="m-kicker">O QUE ESTÁ INCLUSO</p><ul>{included.map(x=><li key={x}>{x}</li>)}</ul></div></div>
+   <div className="m-offer-box"><aside><img src="/figma/19-1959-a86e5.svg" alt="Método Lash Campeã"/><p>De: <s>R$697,00</s> por:</p><strong>12x de R$ 51,40</strong><p>ou R$ 497,00 à vista</p></aside><div className="m-included"><p className="m-kicker">O QUE ESTÁ INCLUSO</p><ul>{included.map(x=><li key={x}>{x}</li>)}</ul></div><div className="m-offer-action"><CTA checkoutButton/><p className="m-guarantee">GARANTIA INCONDICIONAL DE 7 DIAS<br/>Não ficou satisfeita? Devolvemos 100% do valor. Sem perguntas.</p></div></div>
   </Section>
   <Section className="m-maria">
    <img src="/figma/mobile-maria.webp" alt="Maria Lisboa com troféu e destaques de suas conquistas" loading="lazy"/>
