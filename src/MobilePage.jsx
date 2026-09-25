@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import ModuleCarousel from './ModuleCarousel.jsx';
 
 const checkout = 'https://pay.kiwify.com.br/NdyupEi';
@@ -67,10 +67,17 @@ const results = [
   '/figma/19-831-d7ab0.webp','/figma/19-831-01e14.webp','/figma/19-831-991b8.webp',
   '/figma/19-831-efff3.webp','/figma/19-831-97825.webp','/figma/19-831-45e37.webp'
 ];
-const testimonials = [
-  '/figma/mlc-testimonial-gabrieli.webp','/figma/mlc-testimonial-tais.webp','/figma/19-865-a16c4.webp',
-  '/figma/19-865-8dd32.webp','/figma/mlc-testimonial-ariane.webp','/figma/19-865-aba6b.webp',
-  '/figma/19-865-f03eb.webp','/figma/19-865-743e7.webp','/figma/19-865-8600f.webp'
+const feedbackLeft = [
+  ['/figma/19-865-a16c4.webp', 'lashdayanegomes'],
+  ['/figma/19-865-8dd32.webp', 'Cílios/Cursos'],
+  ['/figma/mlc-testimonial-tais.webp', 'Taís Pletsch'],
+  ['/figma/19-865-743e7.webp', 'Thayres Maciel'],
+  ['/figma/19-865-aba6b.webp', 'Feedback de aluna'],
+  ['/figma/19-865-8600f.webp', 'Anna Ribeiro']
+];
+const feedbackRight = [
+  ['/figma/mlc-testimonial-gabrieli.webp', 'Gabrieli Patias'],
+  ['/figma/mlc-testimonial-ariane.webp', 'Ariane Caldas']
 ];
 const included = [
   'Curso Online MLC completo','+ de 15 módulos com +40 aulas gravadas','Material de apoio','Apostila digital',
@@ -80,11 +87,37 @@ const included = [
   'BÔNUS 04 — Material de apoio / apostila digital'
 ];
 
-function CTA({checkoutButton=false}){return <a className="m-cta" href={checkoutButton?checkout:'#investimento-mobile'}>Quero garantir minha vaga</a>}
+function CTA({checkoutButton=false}){return <a className="m-cta" href={checkoutButton?checkout:'#investimento-mobile'} target={checkoutButton?'_top':undefined}>Quero garantir minha vaga</a>}
 function Section({className='',children,...props}){return <section {...props} className={`m-section ${className} m-reveal`}>{children}</section>}
 function Heading({children}){return <h2 className="m-heading">{children}</h2>}
 function Cards({items,numbered=false,icons=[]}){return <div className="m-card-grid">{items.map(([title,body,description],i)=><article className="m-card" key={i}>{numbered&&<span className="m-number">{title}</span>}{icons[i]&&<img className="m-card-icon" src={icons[i]} alt=""/>}<h3>{numbered?body:title}</h3><p>{numbered?description:body}</p></article>)}</div>}
 function Ticker(){return <div className="m-ticker" aria-label="Método Lash Campeã"><div>{Array.from({length:20},(_,i)=><span key={i}>Método Lash Campeã • </span>)}</div></div>}
+function Gallery({photos}){
+ const [selected,setSelected]=useState(null);
+ const [zoom,setZoom]=useState(1);
+ const [touchDistance,setTouchDistance]=useState(null);
+ useEffect(()=>{
+  if(selected===null)return;
+  const onKey=event=>{if(event.key==='Escape')setSelected(null)};
+  document.addEventListener('keydown',onKey);
+  const oldOverflow=document.body.style.overflow;
+  document.body.style.overflow='hidden';
+  return()=>{document.removeEventListener('keydown',onKey);document.body.style.overflow=oldOverflow};
+ },[selected]);
+ const open=index=>{setSelected(index);setZoom(1)};
+ const pinchDistance=event=>Math.hypot(event.touches[0].clientX-event.touches[1].clientX,event.touches[0].clientY-event.touches[1].clientY);
+ return <>
+  <div className="m-photo-grid">{photos.map((src,i)=><button type="button" onClick={()=>open(i)} aria-label={`Ampliar resultado ${i+1}`} key={src}><img src={src} alt={`Resultado de aluna ${i+1}`} loading="lazy"/></button>)}</div>
+  {selected!==null&&<div className="m-lightbox" role="dialog" aria-modal="true" aria-label={`Resultado de aluna ${selected+1}`} onClick={()=>setSelected(null)}>
+   <button className="m-lightbox-close" type="button" onClick={()=>setSelected(null)} aria-label="Fechar imagem">×</button>
+   <div className="m-lightbox-stage" onClick={event=>event.stopPropagation()} onWheel={event=>{event.preventDefault();setZoom(value=>Math.max(1,Math.min(4,value+(event.deltaY<0?.25:-.25))))}} onTouchStart={event=>{if(event.touches.length===2)setTouchDistance(pinchDistance(event))}} onTouchMove={event=>{if(event.touches.length===2&&touchDistance){const next=pinchDistance(event);setZoom(value=>Math.max(1,Math.min(4,value*next/touchDistance)));setTouchDistance(next)}}} onTouchEnd={()=>setTouchDistance(null)}>
+    <img src={photos[selected]} alt={`Resultado de aluna ${selected+1}`} style={{transform:`scale(${zoom})`}}/>
+   </div>
+   <div className="m-lightbox-controls" onClick={event=>event.stopPropagation()}><button type="button" onClick={()=>setZoom(value=>Math.max(1,value-.5))} aria-label="Diminuir zoom">−</button><span>{Math.round(zoom*100)}%</span><button type="button" onClick={()=>setZoom(value=>Math.min(4,value+.5))} aria-label="Aumentar zoom">+</button></div>
+  </div>}
+ </>;
+}
+function FeedbackGallery(){return <div className="m-feedback-grid" aria-label="Feedbacks das alunas"><div>{feedbackLeft.map(([src,name],i)=><div className={`m-feedback-card m-feedback-left-${i+1}`} key={name}><img src={src} alt={`Feedback de ${name}`} loading="lazy"/></div>)}</div><div>{feedbackRight.map(([src,name],i)=><div className={`m-feedback-card m-feedback-right-${i+1}`} key={name}><img src={src} alt={`Feedback de ${name}`} loading="lazy"/></div>)}</div></div>}
 
 export default function MobilePage({faq}){
  useEffect(()=>{
@@ -94,10 +127,11 @@ export default function MobilePage({faq}){
  },[]);
  return <main className="mobile-page">
   <section className="m-hero">
-   <img className="m-hero-photo" src="/figma/heroContext-c4daa.webp" alt="" fetchPriority="high"/>
+   <div className="m-hero-collage" aria-hidden="true">{[1,2,3,4].map(i=><img src={`/figma/mobile-hero-collage-${i}.webp`} alt="" key={i}/>)}</div>
+   <img className="m-hero-photo" src="/figma/mobile-hero.webp" alt="Maria Lisboa com troféus" fetchPriority="high"/>
    <div className="m-hero-shade"/>
    <div className="m-hero-content">
-    <img className="m-logo" src="/figma/heroContext-f8a7e.svg" alt="Método Lash Campeã"/>
+    <img className="m-logo" src="/figma/mobile-hero-logo.svg" alt="Método Lash Campeã"/>
     <h1>PARE DE SONHAR COM O PÓDIO. PREPARE-SE PARA ELE.</h1>
     <p><strong>Aprenda a competir com estratégia,</strong> pensar como uma jurada e construir resultados alinhados aos critérios que realmente valem pontos em um campeonato.</p>
     <p className="m-proof">+100 profissionais na metodologia • +40 mentoradas no pódio • 35 pódios em um único campeonato</p>
@@ -138,7 +172,7 @@ export default function MobilePage({faq}){
    <Cards items={methodCards} numbered/>
   </Section>
   <Section className="m-champion">
-   <img src="/figma/19-479-cdd6f.webp" alt="Maria Lisboa" loading="lazy"/>
+   <div className="m-champion-visual"><img className="m-champion-mark" src="/figma/mobile-mentoria-mlc.svg" alt=""/><img className="m-champion-photo" src="/figma/mobile-mentoria.webp" alt="Maria Lisboa com a bandeira do Brasil e um troféu" loading="lazy"/></div>
    <Heading>Essa não é apenas uma mentoria sobre técnicas…</Heading>
    <p>É uma transformação completa na sua forma de enxergar a extensão de cílios, os campeonatos e, principalmente, o seu próprio potencial e se tornar uma profissional com mentalidade de campeã.</p>
   </Section>
@@ -161,7 +195,7 @@ export default function MobilePage({faq}){
   <Section className="m-modules">
    <Heading>Tudo o que você precisa dominar antes de entrar em uma {gold('competição.')}</Heading>
    <p>Conheça os módulos que fazem parte do Método Lash Campeã e acompanhe uma jornada criada para preparar você para o universo dos campeonatos.</p>
-   <ModuleCarousel/>
+   <ModuleCarousel continuous/>
   </Section>
   <Section className="m-online">
    <div><Heading>Uma metodologia construída nos campeonatos, {gold('agora disponível onde você estiver.')}</Heading><ul>{onlineBenefits.map(x=><li key={x}>{x}</li>)}</ul></div>
@@ -175,29 +209,29 @@ export default function MobilePage({faq}){
   </Section>
   <Section className="m-results">
    <Heading>O Método em números e {gold('resultados reais das alunas.')}</Heading>
-   <div className="m-photo-grid">{results.map((src,i)=><img src={src} alt={`Resultado de aluna ${i+1}`} loading="lazy" key={src}/>)}</div>
+   <Gallery photos={results}/>
   </Section>
   <Section className="m-testimonials">
    <Heading>Mas você não precisa acreditar apenas em mim. {gold('Acredite NELAS.')}</Heading>
    <p>Feedbacks e resultados de profissionais que já passaram pela metodologia.</p>
-   <div className="m-feedback-grid">{testimonials.map((src,i)=><img src={src} alt={`Feedback de aluna ${i+1}`} loading="lazy" key={src}/>)}</div>
+   <FeedbackGallery/>
    <p className="m-testimonial-close">Profissionais diferentes. Histórias diferentes. Categorias diferentes.<br/><em>Um desejo em comum: conquistar o pódio e serem reconhecidas pela excelência dos seus resultados.</em></p>
   </Section>
   <Section className="m-offer" id="investimento-mobile">
    <Heading>Agora você pode estudar o Método Lash Campeã de onde estiver.</Heading>
    <p>Pela primeira vez, a metodologia chega em um formato 100% online e gravado.</p>
-   <div className="m-offer-box"><div><p className="m-kicker">O QUE ESTÁ INCLUSO</p><ul>{included.map(x=><li key={x}>{x}</li>)}</ul></div><aside><img src="/figma/19-1959-a86e5.svg" alt="Método Lash Campeã"/><p>De: <s>R$697,00</s> por:</p><strong>12x de R$ 51,40</strong><p>ou R$ 497,00 à vista</p><CTA checkoutButton/><p className="m-guarantee">GARANTIA INCONDICIONAL DE 7 DIAS<br/>Não ficou satisfeita? Devolvemos 100% do valor. Sem perguntas.</p></aside></div>
+   <div className="m-offer-box"><aside><img src="/figma/19-1959-a86e5.svg" alt="Método Lash Campeã"/><p>De: <s>R$697,00</s> por:</p><strong>12x de R$ 51,40</strong><p>ou R$ 497,00 à vista</p><CTA checkoutButton/><p className="m-guarantee">GARANTIA INCONDICIONAL DE 7 DIAS<br/>Não ficou satisfeita? Devolvemos 100% do valor. Sem perguntas.</p></aside><div><p className="m-kicker">O QUE ESTÁ INCLUSO</p><ul>{included.map(x=><li key={x}>{x}</li>)}</ul></div></div>
   </Section>
   <Section className="m-maria">
-   <img src="/figma/19-1893-469e2.webp" alt="Maria Lisboa" loading="lazy"/>
+   <img src="/figma/mobile-maria.webp" alt="Maria Lisboa com troféu e destaques de suas conquistas" loading="lazy"/>
    <div><Heading>Maria Lisboa</Heading><p>Campeã internacional • Mentora • Jurada • Palestrante</p><p>Há mais de cinco anos no mercado da beleza, Maria transformou os campeonatos em uma ferramenta de crescimento e reconhecimento profissional.</p><p>Sua trajetória reúne mais de 16 premiações mencionadas ao longo da carreira, com conquistas no Brasil e no exterior, incluindo primeiros lugares presenciais na Itália e em Dubai, além de reconhecimento no Japão.</p><p>Depois de viver a experiência como competidora e campeã, passou também a atuar como jurada e a transformar o conhecimento adquirido em uma metodologia para outras Lash Designers.</p><p>Hoje, mais de 100 profissionais já passaram por sua metodologia e mais de 50 mentoradas alcançaram o pódio.</p><p className="m-kicker">Competidora → Campeã → Mentora → Jurada → Método Lash Campeã</p></div>
   </Section>
   <Section className="m-closing">
+   <img className="m-closing-photo" src="/figma/mobile-eu-precisei.webp" alt="Maria Lisboa com seus troféus" loading="lazy"/>
    <Heading>Eu precisei percorrer um longo caminho até desenvolver o olhar que tenho hoje.</Heading>
    <p className="m-kicker">Competir. Errar. Corrigir. Estudar. Ganhar. Perder. Avaliar. Ensinar.</p>
    <p>O Método Lash Campeã nasceu para reunir esse conhecimento e entregar a você um caminho estruturado para a sua preparação.</p>
    <h3>OS PRÓXIMOS PÓDIOS AINDA NÃO TÊM NOME.</h3><p className="m-final-line">Talvez um deles tenha o seu.</p>
-   <img src="/figma/19-1056-8cb0f.webp" alt="Maria Lisboa" loading="lazy"/>
   </Section>
   <section className="faq-custom m-faq"><div><h2>Perguntas <span>frequentes.</span></h2>{faq.map(([q,a])=><details key={q}><summary>{q}<span aria-hidden="true">+</span></summary><p className="faq-answer">{a}</p></details>)}</div></section>
   <footer className="m-footer">© Copyright Maria Lisboa 2026 – Todos os direitos reservados.<br/>Desenvolvido por: @josielmorais_</footer>

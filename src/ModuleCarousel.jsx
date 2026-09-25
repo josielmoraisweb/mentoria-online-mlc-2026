@@ -14,7 +14,7 @@ const modules = [
   ['/figma/mlc-module-10.webp', 'Erros, pontuação e desclassificação'],
 ];
 
-export default function ModuleCarousel() {
+export default function ModuleCarousel({continuous = false}) {
   const [index, setIndex] = useState(modules.length);
   const [animated, setAnimated] = useState(true);
   const [inView, setInView] = useState(false);
@@ -72,6 +72,16 @@ export default function ModuleCarousel() {
       setIndex(modules.length * 2 - 1);
     }
   };
+
+  if (continuous) return <div className="modules-carousel modules-carousel-continuous" style={{'--module-loop-distance': `${modules.length * step}px`}} aria-label="Módulos do Método Lash Campeã">
+    <div className="modules-carousel-viewport">
+      <div className="modules-carousel-track continuous" ref={trackRef}>
+        {[0, 1].flatMap(copy => modules.map(([src, label], item) => <div className="modules-carousel-card" key={`${copy}-${item}`} aria-hidden={copy === 1}>
+          <img src={src} alt={copy === 0 ? label : ''} loading="lazy" draggable="false"/>
+        </div>))}
+      </div>
+    </div>
+  </div>;
 
   return <div className="modules-carousel" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocus={() => setPaused(true)} onBlur={event => {if (!event.currentTarget.contains(event.relatedTarget)) setPaused(false)}}>
     <div className="modules-carousel-viewport" ref={viewportRef}>
