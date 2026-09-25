@@ -42,10 +42,17 @@ function App(){
  useEffect(()=>{
   const resize=()=>document.documentElement.style.setProperty('--site-scale',Math.min(1,innerWidth/1920));resize();addEventListener('resize',resize);
   const video=document.querySelector('[data-node-id="19:214"]');if(video)video.innerHTML='<iframe class="site-video" src="https://www.youtube-nocookie.com/embed/ebj7Ctl7pyo?rel=0" title="Conheça o Método Lash Campeã" loading="lazy" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
-  document.querySelectorAll('[data-name="CTAButton"]').forEach(button=>{button.setAttribute('role','link');button.setAttribute('tabindex','0');button.setAttribute('aria-label','Quero garantir minha vaga');button.addEventListener('click',()=>location.assign(checkout));button.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();location.assign(checkout)}})});
+  document.querySelectorAll('[data-name="CTAButton"]').forEach(button=>{
+   const isCheckout=Boolean(button.closest('[data-section="offer"]'));
+   const activate=()=>isCheckout?location.assign(checkout):document.getElementById('investimento-desktop')?.scrollIntoView({behavior:'smooth',block:'start'});
+   button.setAttribute('role','link');button.setAttribute('tabindex','0');
+   button.setAttribute('aria-label',isCheckout?'Ir para o checkout':'Ver investimento');
+   button.addEventListener('click',activate);
+   button.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();activate()}});
+  });
   const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}}),{threshold:.08});document.querySelectorAll('.reveal-section').forEach(x=>observer.observe(x));
   return ()=>{removeEventListener('resize',resize);observer.disconnect()};
  },[]);
- return <><main id="figma-page">{sections.map(([key,Component,height],i)=><React.Fragment key={key}><section className={`figma-section ${i?'reveal-section':'visible'}`} data-section={key} style={{height}}><Component/></section>{['hero','champion','online'].includes(key)&&<Ticker/>}</React.Fragment>)}<Faq/><section className="figma-section" data-section="footer" style={{height:148}}><Footer/></section></main><MobilePage faq={faq}/></>;
+ return <><main id="figma-page">{sections.map(([key,Component,height],i)=><React.Fragment key={key}><section id={key==='offer'?'investimento-desktop':undefined} className={`figma-section ${i?'reveal-section':'visible'}`} data-section={key} style={{height}}><Component/></section>{['hero','champion','online'].includes(key)&&<Ticker/>}</React.Fragment>)}<Faq/><section className="figma-section" data-section="footer" style={{height:148}}><Footer/></section></main><MobilePage faq={faq}/></>;
 }
 createRoot(document.getElementById('app')).render(<App/>);

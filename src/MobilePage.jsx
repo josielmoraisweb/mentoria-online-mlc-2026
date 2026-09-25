@@ -68,8 +68,8 @@ const results = [
   '/figma/19-831-efff3.webp','/figma/19-831-97825.webp','/figma/19-831-45e37.webp'
 ];
 const testimonials = [
-  '/figma/19-865-5d92d-atualizado.webp','/figma/19-865-82b88.webp','/figma/19-865-a16c4.webp',
-  '/figma/19-865-8dd32.webp','/figma/19-865-40c83-atualizado.webp','/figma/19-865-aba6b.webp',
+  '/figma/mlc-testimonial-gabrieli.webp','/figma/mlc-testimonial-tais.webp','/figma/19-865-a16c4.webp',
+  '/figma/19-865-8dd32.webp','/figma/mlc-testimonial-ariane.webp','/figma/19-865-aba6b.webp',
   '/figma/19-865-f03eb.webp','/figma/19-865-743e7.webp','/figma/19-865-8600f.webp'
 ];
 const included = [
@@ -80,8 +80,8 @@ const included = [
   'BÔNUS 04 — Material de apoio / apostila digital'
 ];
 
-function CTA(){return <a className="m-cta" href={checkout}>Quero garantir minha vaga</a>}
-function Section({className='',children}){return <section className={`m-section ${className} m-reveal`}>{children}</section>}
+function CTA({checkoutButton=false}){return <a className="m-cta" href={checkoutButton?checkout:'#investimento-mobile'}>Quero garantir minha vaga</a>}
+function Section({className='',children,...props}){return <section {...props} className={`m-section ${className} m-reveal`}>{children}</section>}
 function Heading({children}){return <h2 className="m-heading">{children}</h2>}
 function Cards({items,numbered=false,icons=[]}){return <div className="m-card-grid">{items.map(([title,body,description],i)=><article className="m-card" key={i}>{numbered&&<span className="m-number">{title}</span>}{icons[i]&&<img className="m-card-icon" src={icons[i]} alt=""/>}<h3>{numbered?body:title}</h3><p>{numbered?description:body}</p></article>)}</div>}
 function Ticker(){return <div className="m-ticker" aria-label="Método Lash Campeã"><div>{Array.from({length:20},(_,i)=><span key={i}>Método Lash Campeã • </span>)}</div></div>}
@@ -170,7 +170,7 @@ export default function MobilePage({faq}){
   <Ticker/>
   <Section className="m-awards">
    <Heading>Conquistas que validam {gold('a metodologia.')}</Heading>
-   <div className="m-award-grid">{awards.map(([src,title,description])=><article key={title}><img src={src} alt={title} loading="lazy"/><div><h3>{title}</h3><p>{description}</p></div></article>)}</div>
+   <div className="m-award-grid">{awards.map(([src,title,description],i)=><article key={title}>{i===0?<div className="m-award-photo"><img className="italy-photo" src={src} alt={title} loading="lazy"/></div>:<img src={src} alt={title} loading="lazy"/>}<div><h3>{title}</h3><p>{description}</p></div></article>)}</div>
    <CTA/>
   </Section>
   <Section className="m-results">
@@ -183,10 +183,10 @@ export default function MobilePage({faq}){
    <div className="m-feedback-grid">{testimonials.map((src,i)=><img src={src} alt={`Feedback de aluna ${i+1}`} loading="lazy" key={src}/>)}</div>
    <p className="m-testimonial-close">Profissionais diferentes. Histórias diferentes. Categorias diferentes.<br/><em>Um desejo em comum: conquistar o pódio e serem reconhecidas pela excelência dos seus resultados.</em></p>
   </Section>
-  <Section className="m-offer" id="inscricao">
+  <Section className="m-offer" id="investimento-mobile">
    <Heading>Agora você pode estudar o Método Lash Campeã de onde estiver.</Heading>
    <p>Pela primeira vez, a metodologia chega em um formato 100% online e gravado.</p>
-   <div className="m-offer-box"><div><p className="m-kicker">O QUE ESTÁ INCLUSO</p><ul>{included.map(x=><li key={x}>{x}</li>)}</ul></div><aside><img src="/figma/19-1959-a86e5.svg" alt="Método Lash Campeã"/><p>De: <s>R$697,00</s> por:</p><strong>12x de R$ 51,40</strong><p>ou R$ 497,00 à vista</p><CTA/><p className="m-guarantee">GARANTIA INCONDICIONAL DE 7 DIAS<br/>Não ficou satisfeita? Devolvemos 100% do valor. Sem perguntas.</p></aside></div>
+   <div className="m-offer-box"><div><p className="m-kicker">O QUE ESTÁ INCLUSO</p><ul>{included.map(x=><li key={x}>{x}</li>)}</ul></div><aside><img src="/figma/19-1959-a86e5.svg" alt="Método Lash Campeã"/><p>De: <s>R$697,00</s> por:</p><strong>12x de R$ 51,40</strong><p>ou R$ 497,00 à vista</p><CTA checkoutButton/><p className="m-guarantee">GARANTIA INCONDICIONAL DE 7 DIAS<br/>Não ficou satisfeita? Devolvemos 100% do valor. Sem perguntas.</p></aside></div>
   </Section>
   <Section className="m-maria">
    <img src="/figma/19-1893-469e2.webp" alt="Maria Lisboa" loading="lazy"/>

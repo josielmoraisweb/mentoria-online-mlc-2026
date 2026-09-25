@@ -24,7 +24,7 @@ export default function AwardsSection() {
                   <div className="h-[324.932px] pointer-events-none relative shadow-[0px_4.952px_4.952px_0px_rgba(0,0,0,0.25)] shrink-0 w-full" data-node-id="19:782" data-name="Image (Itália 2025)">
                     <div aria-hidden className="absolute inset-0">
                       <div className="absolute bg-[rgba(255,255,255,0)] inset-0" />
-                      <img alt="" className="absolute max-w-none object-cover size-full" src={imgImageItalia2025} />
+                      <img alt="" className="absolute max-w-none object-cover size-full italy-photo" src={imgImageItalia2025} />
                     </div>
                     <div className="absolute inset-0 rounded-[inherit] shadow-[inset_0px_4.952px_4.952px_0px_rgba(0,0,0,0.25)]" />
                   </div>

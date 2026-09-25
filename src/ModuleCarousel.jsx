@@ -1,11 +1,17 @@
 import React, {useEffect, useState} from 'react';
 
 const modules = [
-  ['/figma/19-679-4f318.webp', 'Boas-vindas ao Método Lash Campeã'],
-  ['/figma/19-679-74acf.webp', 'Campeonato x carreira'],
-  ['/figma/19-679-f987d.webp', 'Análise dos olhos e cílios'],
-  ['/figma/19-679-871fd.webp', 'Tipos de campeonato'],
-  ['/figma/19-679-49f44.webp', 'Critérios de campeonato'],
+  ['/figma/mlc-module-00.webp', 'Boas-vindas ao Método Lash Campeã'],
+  ['/figma/mlc-module-01.webp', 'Mentalidade de campeã'],
+  ['/figma/mlc-module-02.webp', 'O universo dos campeonatos'],
+  ['/figma/mlc-module-03.webp', 'Regulamentos, categorias e estratégia'],
+  ['/figma/mlc-module-04.webp', 'O olhar dos jurados'],
+  ['/figma/mlc-module-05.webp', 'Critérios técnicos'],
+  ['/figma/mlc-module-06.webp', 'Modelo e análise do olhar'],
+  ['/figma/mlc-module-07.webp', 'Execução com padrão competitivo'],
+  ['/figma/mlc-module-08.webp', 'Campeonatos online e presenciais'],
+  ['/figma/mlc-module-09.webp', 'Fotografia e apresentação'],
+  ['/figma/mlc-module-10.webp', 'Erros, pontuação e desclassificação'],
 ];
 
 export default function ModuleCarousel() {
@@ -41,14 +47,14 @@ export default function ModuleCarousel() {
 
   useEffect(() => {
     if (!viewportRef.current) return;
-    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), {threshold: 0.2});
+    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), {threshold: 0.01});
     observer.observe(viewportRef.current);
     return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
     if (!inView || paused || reducedMotion) return;
-    const timer = window.setInterval(() => {setAnimated(true); setIndex(current => current + 1)}, 3200);
+    const timer = window.setInterval(() => {setAnimated(true); setIndex(current => current + 1)}, 2800);
     return () => window.clearInterval(timer);
   }, [inView, paused, reducedMotion]);
 
