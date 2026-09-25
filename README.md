@@ -1,7 +1,18 @@
-# Mentoria MLC 2026
+# Método Lash Campeã
 
-Página estática responsiva baseada no frame **“Mentoria MLC 2026 | Método Lash Campeã — Maria Lisboa”** do Figma.
+Landing page responsiva baseada no frame final `MLC - ONLINE 2` do Figma.
 
-Para visualizar localmente, abra `index.html` no navegador ou sirva esta pasta com qualquer servidor HTTP estático.
+## Desenvolvimento
 
-Todas as imagens usadas pela página estão em `assets/` no formato WebP. Nenhum deploy ou publicação foi realizado.
+```bash
+pnpm install
+pnpm dev
+```
+
+## Produção
+
+```bash
+pnpm build
+```
+
+Os CTAs levam para a página de checkout da Kiwify e o vídeo de apresentação é incorporado do YouTube. As imagens do projeto foram otimizadas em WebP.
