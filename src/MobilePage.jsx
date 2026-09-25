@@ -92,7 +92,7 @@ function CTA({checkoutButton=false}){return <a className="m-cta" href={checkoutB
 function Section({className='',children,...props}){return <section {...props} className={`m-section ${className} m-reveal`}>{children}</section>}
 function Heading({children}){return <h2 className="m-heading">{children}</h2>}
 function Cards({items,numbered=false,icons=[]}){return <div className="m-card-grid">{items.map(([title,body,description],i)=><article className="m-card" key={i}>{numbered&&<span className="m-number">{title}</span>}{icons[i]&&<img className="m-card-icon" src={icons[i]} alt=""/>}<h3>{numbered?body:title}</h3><p>{numbered?description:body}</p></article>)}</div>}
-function Ticker(){return <div className="m-ticker" aria-label="Método Lash Campeã"><div>{Array.from({length:20},(_,i)=><span key={i}>Método Lash Campeã • </span>)}</div></div>}
+function Ticker(){return <div className="m-ticker" aria-label="Método Lash Campeã"><div>{Array.from({length:20},(_,i)=><span className={i%2?'ticker-light':'ticker-medium'} key={i}>Método Lash Campeã • </span>)}</div></div>}
 function Gallery({photos}){
  const [selected,setSelected]=useState(null);
  const [zoom,setZoom]=useState(1);
@@ -130,20 +130,23 @@ export default function MobilePage({faq}){
  },[]);
  return <main className="mobile-page">
   <section className="m-hero">
-   <img className="m-hero-frame" src="/figma/mobile-hero-frame.webp" alt="Maria Lisboa com troféus e conquistas" fetchPriority="high"/>
+   <img className="m-hero-ellipse" src="/figma/mobile-hero-v2-ellipse.svg" alt=""/>
+   <img className="m-hero-frame" src="/figma/mobile-hero-v2-frame.webp" alt="Maria Lisboa com troféus e conquistas" fetchPriority="high"/>
    <div className="m-hero-content">
-    <img className="m-logo" src="/figma/mobile-hero-logo.svg" alt="Método Lash Campeã"/>
+    <img className="m-logo" src="/figma/mobile-hero-v2-logo.svg" alt="Método Lash Campeã"/>
     <h1>PARE DE SONHAR COM O PÓDIO. PREPARE-SE PARA ELE.</h1>
     <p><strong>Aprenda a competir com estratégia,</strong> pensar como uma jurada e construir resultados alinhados aos critérios que realmente valem pontos em um campeonato.</p>
     <p className="m-proof">+100 profissionais na metodologia • +40 mentoradas no pódio • 35 pódios em um único campeonato</p>
     <CTA/>
     <div className="m-payment-row" aria-label="Formas de pagamento e compra segura">
-     <span className="m-payment-method m-payment-boleto"><img src="/figma/heroContext-00cf8.svg" alt=""/><img src="/figma/heroContext-d2397.svg" alt=""/></span>
-     <span className="m-payment-method"><img src="/figma/heroContext-a12be.svg" alt=""/></span>
-     <span className="m-payment-method m-payment-mastercard"><img src="/figma/heroContext-57b3c.svg" alt=""/></span>
-     <span className="m-payment-method"><img src="/figma/heroContext-81ff2.svg" alt=""/></span>
-     <span className="m-payment-method m-payment-pix"><img src="/figma/heroContext-8b22c.svg" alt=""/></span>
-     <img className="m-payment-trust" src="/figma/heroContext-7abb3.svg" alt=""/>
+     <span className="m-payment-icons">
+      <span className="m-payment-method m-payment-boleto"><img src="/figma/mobile-hero-v2-boleto-bg.svg" alt=""/><img src="/figma/mobile-hero-v2-boleto.svg" alt=""/></span>
+      <span className="m-payment-method"><img src="/figma/mobile-hero-v2-visa.svg" alt=""/></span>
+      <span className="m-payment-method m-payment-mastercard"><img src="/figma/mobile-hero-v2-mastercard.svg" alt=""/></span>
+      <span className="m-payment-method"><img src="/figma/mobile-hero-v2-amex.svg" alt=""/></span>
+      <span className="m-payment-method m-payment-pix"><img src="/figma/mobile-hero-v2-pix.svg" alt=""/></span>
+     </span>
+     <img className="m-payment-trust" src="/figma/mobile-hero-v2-trust.svg" alt=""/>
     </div>
    </div>
   </section>
