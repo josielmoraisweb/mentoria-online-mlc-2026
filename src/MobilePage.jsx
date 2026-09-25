@@ -154,7 +154,7 @@ export default function MobilePage({faq}){
   <Ticker/>
   <Section className="m-video-section">
    <Heading>Conheça o Método Lash Campeã</Heading>
-   <div className="m-video"><YouTubeVideo/></div>
+   <div className="m-video"><YouTubeVideo mobile/></div>
    <CTA/>
   </Section>
   <Section className="m-identification">

@@ -22,24 +22,24 @@ function loadYouTubeApi() {
   return apiPromise;
 }
 
-export default function YouTubeVideo() {
-  const containerRef = useRef(null);
+export default function YouTubeVideo({mobile = false}) {
   const mountRef = useRef(null);
   const playerRef = useRef(null);
   const soundRequestedRef = useRef(false);
   const [visible, setVisible] = useState(false);
+  const [playing, setPlaying] = useState(false);
   const [soundOn, setSoundOn] = useState(false);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setVisible(true);
-        observer.disconnect();
-      }
-    }, {rootMargin: '350px'});
-    observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, []);
+    // This section is near the top: preload the active layout immediately.
+    const viewport = window.matchMedia('(max-width: 900px)');
+    const activate = () => {
+      if (viewport.matches === mobile) setVisible(true);
+    };
+    activate();
+    viewport.addEventListener('change', activate);
+    return () => viewport.removeEventListener('change', activate);
+  }, [mobile]);
 
   useEffect(() => {
     if (!visible) return;
@@ -54,6 +54,11 @@ export default function YouTubeVideo() {
             if (soundRequestedRef.current) target.unMute();
             target.playVideo();
           },
+          onStateChange: ({data}) => {
+            if (data === YT.PlayerState.PLAYING) setPlaying(true);
+          },
+          onError: () => setPlaying(true),
+          onAutoplayBlocked: () => setPlaying(true),
         },
       });
     }).catch(() => {});
@@ -79,8 +84,9 @@ export default function YouTubeVideo() {
     }
   };
 
-  return <div className="youtube-video" ref={containerRef}>
-    {visible && <iframe className="youtube-video-player" ref={mountRef} src={`https://www.youtube-nocookie.com/embed/${VIDEO_ID}?autoplay=0&controls=0&playsinline=1&rel=0&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}`} title="Conheça o Método Lash Campeã" allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen/>}
+  return <div className="youtube-video">
+    {visible && <iframe className="youtube-video-player" ref={mountRef} src={`https://www.youtube-nocookie.com/embed/${VIDEO_ID}?autoplay=0&controls=0&fs=0&iv_load_policy=3&playsinline=1&rel=0&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}`} title="Conheça o Método Lash Campeã" allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen/>}
+    {!playing && <img className="youtube-video-poster" src={`https://i.ytimg.com/vi/${VIDEO_ID}/maxresdefault.jpg`} alt="" aria-hidden="true"/>}
     <button className={`youtube-sound-button${soundOn ? ' is-on' : ''}`} type="button" onClick={toggleSound} aria-label={soundOn ? 'Desativar som do vídeo' : 'Ativar som do vídeo'}>
       {!soundOn && <span className="youtube-sound-top">Clique aqui</span>}
       <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M8 19h8l10-8v26l-10-8H8z" stroke="currentColor" strokeWidth="2.6" strokeLinejoin="round"/><path d={soundOn ? 'M32 17c4 4 4 10 0 14M36 12c7 7 7 17 0 24' : 'M33 17l10 14M43 17L33 31'} stroke="currentColor" strokeWidth="2.6" strokeLinecap="round"/></svg>
