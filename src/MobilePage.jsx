@@ -178,7 +178,7 @@ export default function MobilePage({faq}){
    <Cards items={methodCards} numbered/>
   </Section>
   <Section className="m-champion">
-   <div className="m-champion-visual"><img className="m-champion-mark" src="/figma/mobile-mentoria-mlc.svg" alt=""/><img className="m-champion-photo" src="/figma/mobile-mentoria.webp" alt="Maria Lisboa com a bandeira do Brasil e um troféu" loading="lazy"/></div>
+   <div className="m-champion-visual"><img className="m-champion-photo" src="/figma/mobile-mentoria-sobre.webp" alt="Maria Lisboa com a bandeira do Brasil e um troféu" loading="lazy"/></div>
    <Heading>Essa não é apenas uma mentoria sobre técnicas…</Heading>
    <p>É uma transformação completa na sua forma de enxergar a extensão de cílios, os campeonatos e, principalmente, o seu próprio potencial e se tornar uma profissional com mentalidade de campeã.</p>
   </Section>
