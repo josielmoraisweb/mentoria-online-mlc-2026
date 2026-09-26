@@ -10,7 +10,7 @@ export default function Footer() {
       <div className="content-stretch flex flex-col h-[32.186px] items-center pt-[9.903px] relative shrink-0 w-[1870.484px]" data-node-id="19:1116" data-name="Paragraph">
         <p className="[word-break:break-word] font-['Poppins:Light'] leading-[0] not-italic relative shrink-0 text-[0px] text-[rgba(139,115,85,0.6)] text-center whitespace-nowrap" data-node-id="19:1117">
           <span className="leading-[22.282px] text-[14.855px]">{`Desenvolvido por: `}</span>
-          <span className="font-['Poppins:Medium'] leading-[22.282px] text-[14.855px] text-[rgba(196,180,154,0.55)]">@josielmorais_</span>
+          <a className="font-['Poppins:Medium'] leading-[22.282px] text-[14.855px] text-[rgba(196,180,154,0.55)]" href="https://www.instagram.com/josielmorais_/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de @josielmorais_">@josielmorais_</a>
         </p>
       </div>
     </div>

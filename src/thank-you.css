@@ -38,7 +38,8 @@ button,a{-webkit-tap-highlight-color:transparent}
 .ty-footer{padding:44px 24px;background:#140c08;border-top:1px solid rgba(200,162,77,.12);text-align:center}
 .ty-footer p{margin:0;color:rgba(196,180,154,.7);font-size:16px;font-weight:300;line-height:24px}
 .ty-footer p+p{margin-top:10px;color:rgba(139,115,85,.6);font-size:15px}
-.ty-footer span{color:rgba(196,180,154,.55);font-weight:500}
+.ty-footer a{color:rgba(196,180,154,.55);font-weight:500;text-decoration:none}
+.ty-footer a:hover,.ty-footer a:focus-visible{color:#d4ae59;text-decoration:underline}
 @media(max-width:900px){
  .ty-ticker{height:42px;font-size:15px}
  .ty-hero{min-height:0;padding:72px 24px 62px}

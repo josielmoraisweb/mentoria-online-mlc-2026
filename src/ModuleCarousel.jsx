@@ -18,6 +18,7 @@ export default function ModuleCarousel({continuous = false}) {
   const [index, setIndex] = useState(modules.length);
   const [animated, setAnimated] = useState(true);
   const [inView, setInView] = useState(false);
+  const [loadCards, setLoadCards] = useState(false);
   const [paused, setPaused] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [step, setStep] = useState(335);
@@ -49,6 +50,18 @@ export default function ModuleCarousel({continuous = false}) {
   useEffect(() => {
     if (!viewportRef.current) return;
     const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), {threshold: 0.01});
+    observer.observe(viewportRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!viewportRef.current) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setLoadCards(true);
+        observer.disconnect();
+      }
+    }, {rootMargin: '1200px 0px'});
     observer.observe(viewportRef.current);
     return () => observer.disconnect();
   }, []);
@@ -110,7 +123,7 @@ export default function ModuleCarousel({continuous = false}) {
     <div className="modules-carousel-viewport" ref={viewportRef} onPointerDown={startContinuousDrag} onPointerMove={dragContinuous} onPointerUp={stopContinuousDrag} onPointerCancel={stopContinuousDrag}>
       <div className="modules-carousel-track continuous" ref={trackRef}>
         {[0, 1].flatMap(copy => modules.map(([src, label], item) => <div className="modules-carousel-card" key={`${copy}-${item}`} aria-hidden={copy === 1}>
-          <img src={src} alt={copy === 0 ? label : ''} loading="lazy" draggable="false"/>
+          <img src={src} alt={copy === 0 ? label : ''} loading={loadCards ? 'eager' : 'lazy'} draggable="false"/>
         </div>))}
       </div>
     </div>
@@ -123,7 +136,7 @@ export default function ModuleCarousel({continuous = false}) {
       <div className={`modules-carousel-track${animated ? '' : ' no-transition'}`} ref={trackRef} style={{transform: `translate3d(${-index * step}px,0,0)`}} onTransitionEnd={finishTransition}>
         {Array.from({length: 3}, (_, copy) => modules.map(([src, label], item) =>
           <div className="modules-carousel-card" key={`${copy}-${item}`} aria-hidden={copy !== 1}>
-            <img src={src} alt={copy === 1 ? label : ''} loading="lazy" draggable="false"/>
+            <img src={src} alt={copy === 1 ? label : ''} loading={loadCards ? 'eager' : 'lazy'} draggable="false"/>
           </div>
         ))}
       </div>

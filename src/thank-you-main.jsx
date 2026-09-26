@@ -112,7 +112,7 @@ function ThankYouPage() {
       <h2>O PÓDIO COMEÇA MUITO ANTES<br className="ty-desktop-break"/> DO CAMPEONATO.</h2>
       <p>PREPARE-SE PARA ELE.</p>
     </section>
-    <footer className="ty-footer"><p>© Copyright Maria Lisboa 2026 – Todos os direitos reservados.</p><p>Desenvolvido por: <span>@josielmorais_</span></p></footer>
+    <footer className="ty-footer"><p>© Copyright Maria Lisboa 2026 – Todos os direitos reservados.</p><p>Desenvolvido por: <a href="https://www.instagram.com/josielmorais_/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de @josielmorais_">@josielmorais_</a></p></footer>
   </main>;
 }
 

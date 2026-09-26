@@ -243,6 +243,6 @@ export default function MobilePage({faq}){
    <h3>OS PRÓXIMOS PÓDIOS AINDA NÃO TÊM NOME.</h3><p className="m-final-line">Talvez um deles tenha o seu.</p>
   </Section>
   <section className="faq-custom m-faq"><div><h2>Perguntas <span>frequentes.</span></h2>{faq.map(([q,a])=><details key={q}><summary>{q}<span aria-hidden="true">+</span></summary><p className="faq-answer">{a}</p></details>)}</div></section>
-  <footer className="m-footer">© Copyright Maria Lisboa 2026 – Todos os direitos reservados.<br/>Desenvolvido por: @josielmorais_</footer>
+  <footer className="m-footer">© Copyright Maria Lisboa 2026 – Todos os direitos reservados.<br/>Desenvolvido por: <a href="https://www.instagram.com/josielmorais_/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de @josielmorais_">@josielmorais_</a></footer>
  </main>;
 }
