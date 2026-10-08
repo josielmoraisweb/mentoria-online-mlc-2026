@@ -3,7 +3,7 @@ import {createRoot} from 'react-dom/client';
 import './thank-you.css';
 
 const videoId = 'pkhOV79SMZs';
-const groupLink = 'https://chat.whatsapp.com/JOkKd9hzZuWKwKMZS8hYP0?mode=gi_t';
+const groupLink = 'https://chat.whatsapp.com/JOkKd9hzZuWKwKMZS8hYP0';
 let youtubeApiPromise;
 
 function loadYouTubeApi() {
